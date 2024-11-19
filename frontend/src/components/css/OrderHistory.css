@@ -1,0 +1,155 @@
+/* OrderHistory.css */
+
+.order-history {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.order-table th,
+.order-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.order-table th {
+  background-color: #333;
+  color: white;
+}
+
+.order-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.order-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.action-button {
+  padding: 8px 16px;
+  margin: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.action-button:hover {
+  background-color: #555;
+  color: white;
+}
+
+.delete-button {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
+}
+
+.review-button {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.review-button:hover {
+  background-color: #27ae60;
+}
+
+.email-button {
+  background-color: #3498db;
+  color: white;
+}
+
+.email-button:hover {
+  background-color: #2980b9;
+}
+
+.delete-confirmation,
+.email-view-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.delete-confirmation p,
+.email-view-modal h2 {
+  color: #fff;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.delete-confirmation button,
+.email-view-modal button {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.delete-confirmation button:hover,
+.email-view-modal button:hover {
+  background-color: #444;
+  color: white;
+}
+
+.delete-confirmation button {
+  background-color: #2ecc71;
+  border: 1px solid #27ae60;
+}
+
+.email-view-modal {
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  padding: 30px;
+}
+
+.email-view-modal p {
+  color: #ddd;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.email-view-modal button {
+  background-color: #3498db;
+  color: white;
+}
+
+.email-view-modal button:hover {
+  background-color: #2980b9;
+}
+
+.order-history .loading, .order-history .error {
+  font-size: 1rem;
+  color: #ff5733;
+  margin: 20px 0;
+}
+
+

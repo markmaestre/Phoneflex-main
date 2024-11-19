@@ -1,0 +1,79 @@
+:root {
+  --primary-color: #007bff; /* Bootstrap primary color */
+  --secondary-color: #28a745; /* Green color for Add to Cart */
+  --hover-primary: #0056b3; /* Darker shade on hover */
+  --hover-secondary: #218838; /* Darker green shade on hover */
+  --text-color: #333; /* Default text color */
+}
+
+/* Home Container */
+.home-container {
+  padding-top: 60px; /* Adjust this value based on your navbar height */
+}
+
+/* Navbar styles */
+.navbar {
+  margin-bottom: 20px; /* Space below the navbar */
+}
+
+/* Featured Product Styles */
+.featured-product {
+  text-align: center; /* Center the image and buttons */
+  margin: 20px 0; /* Space above and below the featured product section */
+}
+
+.featured-image {
+  max-width: 100%; /* Make the image responsive */
+  height: auto; /* Maintain aspect ratio */
+}
+
+.button-container {
+  margin-top: 10px; /* Space between image and buttons */
+}
+
+/* Add to Cart Button */
+.add-to-cart-button {
+  background-color: var(--secondary-color); /* Green color for Add to Cart */
+  color: white; /* Text color */
+}
+
+.add-to-cart-button:hover {
+  background-color: var(--hover-secondary); /* Darker green shade on hover */
+}
+
+/* Redmi Product Section Styles */
+.-product-section {
+  margin-top: 30px; /* Space between product section */
+}
+
+.-product-section .card {
+  max-width: 250px; /* Adjusted width for a more spacious card */
+  margin: auto;
+  text-align: center;
+}
+
+.-product-section .card-img-top {
+  max-width: 100%; /* Make the image responsive */
+  max-height: 100px; /* Set max height while preserving aspect ratio */
+  object-fit: contain; /* Ensure full image is visible without cropping */
+  padding: 10px; /* Add padding if needed */
+}
+
+.-product-section .card-title {
+  font-size: 0.9rem; /* Smaller font size for card titles */
+  margin-top: 10px; /* Space above the title */
+}
+
+.-product-section .btn {
+  font-size: 0.8rem; /* Smaller button font size */
+  padding: 5px 10px; /* Smaller padding for buttons */
+  margin-top: 5px;
+  width: 100%; /* Full width for consistency */
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+  .redmi-product-section .card {
+      max-width: 90%; /* Allow cards to take more space on smaller screens */
+  }
+}
