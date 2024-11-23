@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './css/ProductsList.css'; // Import the CSS file for styling
+import './css/ProductsList.css'; 
 
 const ProductsList = () => {
   const [products, setProducts] = useState([]);

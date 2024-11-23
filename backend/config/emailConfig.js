@@ -1,14 +1,13 @@
-// backend/config/emailConfig.js
-const nodemailer = require('nodemailer');
-require('dotenv').config();  // Import dotenv to use environment variables
 
-// Create a transport using Mailtrap SMTP
+const nodemailer = require('nodemailer');
+require('dotenv').config(); 
+
 const transporter = nodemailer.createTransport({
-  host: 'smtp.mailtrap.io', // Mailtrap SMTP server
-  port: 587, // SMTP port for Mailtrap
+  host: 'smtp.mailtrap.io', 
+  port: 587, 
   auth: {
-    user: process.env.MAILTRAP_USER, // Mailtrap username
-    pass: process.env.MAILTRAP_PASS, // Mailtrap password
+    user: process.env.MAILTRAP_USER, 
+    pass: process.env.MAILTRAP_PASS, 
   },
 });
 

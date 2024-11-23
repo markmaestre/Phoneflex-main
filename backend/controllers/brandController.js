@@ -1,23 +1,16 @@
 const Brand = require('../models/Brand');
 const multer = require('multer');
 const path = require('path');
-
-// Set up multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Ensure this folder exists
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
+const { storage } = require('../utils/cloudinary'); // Import the Cloudinary storage
 const upload = multer({ storage });
 
-// Create a new brand
+
+
+
 exports.createBrand = async (req, res) => {
   try {
     const { name, description } = req.body;
-    const image = req.file.path; // Use multer to get the image path
+    const image = req.file ? req.file.path : null; // Get the Cloudinary URL
     const brand = new Brand({ name, description, image });
     await brand.save();
     res.status(201).json({ message: 'Brand created successfully!', brand });
@@ -26,7 +19,7 @@ exports.createBrand = async (req, res) => {
   }
 };
 
-// Get all brands
+
 exports.getBrands = async (req, res) => {
   try {
     const brands = await Brand.find();
@@ -41,7 +34,7 @@ exports.updateBrand = async (req, res) => {
   const { id } = req.params;
   try {
     const { name, description } = req.body;
-    const image = req.file ? req.file.path : undefined; // Check if an image is uploaded
+    const image = req.file ? req.file.path : undefined; // New image URL from Cloudinary
     const updatedBrand = await Brand.findByIdAndUpdate(id, { name, description, image }, { new: true });
     res.status(200).json({ message: 'Brand updated successfully!', updatedBrand });
   } catch (error) {
@@ -49,7 +42,7 @@ exports.updateBrand = async (req, res) => {
   }
 };
 
-// Delete a brand
+
 exports.deleteBrand = async (req, res) => {
   const { id } = req.params;
   try {

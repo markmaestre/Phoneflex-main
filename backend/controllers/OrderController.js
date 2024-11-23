@@ -1,18 +1,14 @@
 const Order = require('../models/Order');
 const Product = require('../models/Product');
 const User = require('../models/User');
-const transporter = require('../config/emailConfig'); // Import Mailtrap config for email sending
-
-// Create Order
+const transporter = require('../config/emailConfig'); 
 exports.createOrder = async (req, res) => {
   const { products } = req.body;
   const userId = req.user._id;
-  const shippingAddress = req.user.address; // Automatically get address from logged-in user
-  
+  const shippingAddress = req.user.address;
   try {
     let totalPrice = 0;
-    
-    // Calculate total price and update stock
+
     const productDetails = await Promise.all(
       products.map(async (item) => {
         const product = await Product.findById(item.productId);
@@ -21,7 +17,7 @@ exports.createOrder = async (req, res) => {
           throw new Error(`Product ${product.name || 'unknown'} has insufficient stock`);
         }
 
-        // Update stock
+     
         product.stocks -= item.quantity;
         await product.save();
 
@@ -35,7 +31,7 @@ exports.createOrder = async (req, res) => {
       })
     );
 
-    // Create the order with the calculated total price and product details
+
     const order = new Order({
       userId,
       products: productDetails,
@@ -45,11 +41,11 @@ exports.createOrder = async (req, res) => {
 
     await order.save();
 
-    // Return a success response with the order data
+   
     res.status(201).json({ message: 'Order created successfully', order });
 
   } catch (error) {
-    // Return an error response if something goes wrong
+   
     res.status(400).json({ message: 'Error creating order', error: error.message });
   }
 };
@@ -57,19 +53,19 @@ exports.createOrder = async (req, res) => {
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find()
-      .populate('userId', 'name email') // populate user info if needed
-      .populate('products.productId', 'name price'); // populate product info
+      .populate('userId', 'name email') 
+      .populate('products.productId', 'name price'); 
     res.status(200).json(orders);
   } catch (error) {
     res.status(400).json({ message: 'Error fetching orders', error: error.message });
   }
 };
-// Get Orders for a User
+
 exports.getUserOrders = async (req, res) => {
   try {
     const orders = await Order.find({ userId: req.user._id })
       .populate('products.productId', 'name price')
-      .populate('userId', 'name email'); // Ensure user info is populated
+      .populate('userId', 'name email'); 
     res.status(200).json(orders);
   } catch (error) {
     res.status(400).json({ message: 'Error fetching orders', error: error.message });
@@ -79,12 +75,11 @@ exports.getUserOrders = async (req, res) => {
 
 
 
-// Delete Order
 exports.deleteOrder = async (req, res) => {
   const { orderId } = req.params;
 
   try {
-    // Find the order by ID
+   
     const order = await Order.findById(orderId);
     if (!order) return res.status(404).json({ message: 'Order not found' });
 
@@ -106,23 +101,23 @@ exports.deleteOrder = async (req, res) => {
   }
 };
 exports.updateOrderStatus = async (req, res) => {
-  const { orderId, status } = req.body;  // The new status for the order
+  const { orderId, status } = req.body; 
 
   try {
-    // Find the order by ID
+   
     const order = await Order.findById(orderId);
     if (!order) return res.status(404).json({ message: 'Order not found' });
 
-    // Update the order status
+
     order.status = status;
     await order.save();
 
    
     const user = await User.findById(order.userId);
     const mailOptions = {
-      from: 'your-email@mailtrap.io', // Mailtrap sender address
-      to: user.email, // Recipient address
-      subject: 'Order Status Updated', // Email subject
+      from: 'your-email@mailtrap.io', 
+      to: user.email, 
+      subject: 'Order Status Updated',
       html: `
         <h1>Order Status Updated</h1>
         <p>Hello ${user.name},</p>
@@ -131,17 +126,16 @@ exports.updateOrderStatus = async (req, res) => {
       `,
     };
 
-    // Send the email via the transporter
     await transporter.sendMail(mailOptions);
 
-    // Respond with the updated order
+
     res.status(200).json({ message: 'Order status updated successfully', order });
 
   } catch (error) {
     res.status(400).json({ message: 'Error updating order status', error: error.message });
   }
 };
-// Checkout Order
+
 exports.checkoutOrder = async (req, res) => {
   const { orderId, paymentMethod } = req.body;
 
@@ -151,20 +145,18 @@ exports.checkoutOrder = async (req, res) => {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    // Automatically get address from user
     const shippingAddress = req.user.address;
 
-    // Update the order status to 'shipped' or 'processing' after payment
-    order.status = 'shipped'; // or 'processing'
+    order.status = 'shipped'; 
     order.shippingAddress = shippingAddress;
     await order.save();
 
-    // Send confirmation email to the user
+   
     const user = await User.findById(order.userId);
     const mailOptions = {
-      from: 'your-email@mailtrap.io', // Mailtrap sender address
-      to: user.email, // Recipient address
-      subject: 'Order Confirmation', // Email subject
+      from: 'your-email@mailtrap.io',
+      to: user.email, 
+      subject: 'Order Confirmation', 
       html: `
         <h1>Thank you for your order, ${user.name}!</h1>
         <p>Your order has been successfully processed and is now in the shipping process.</p>
@@ -176,10 +168,10 @@ exports.checkoutOrder = async (req, res) => {
       `,
     };
 
-    // Send the email via the transporter
+  
     await transporter.sendMail(mailOptions);
 
-    // Respond to the client
+
     res.status(200).json({ message: 'Order successfully processed and email sent', order });
   } catch (error) {
     res.status(400).json({ message: 'Error processing order', error: error.message });
