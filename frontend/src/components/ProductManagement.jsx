@@ -148,8 +148,10 @@ const ProductManagement = () => {
       width: 100,
       renderCell: (params) => {
         const imageUrl = params.row.image;  // Assuming `image` is a field in your product data
-        const validImageUrl = imageUrl && imageUrl.startsWith('https://res.cloudinary.com')
-          ? imageUrl
+        const validImageUrl = imageUrl
+          ? imageUrl.startsWith('http')  // Ensure it starts with a valid URL prefix
+            ? imageUrl
+            : `http://localhost:5000/uploads/${imageUrl}` // Construct URL for local images
           : 'http://localhost:5000/uploads/default-placeholder.jpg'; // Fallback image if no valid URL
 
         return (
@@ -171,11 +173,24 @@ const ProductManagement = () => {
       headerName: 'Actions',
       width: 180,
       renderCell: (params) => (
-        <>
-          <Button onClick={() => handleEdit(params.row)} variant="contained" color="primary" style={{ marginRight: '8px' }}>Edit</Button>
-          <Button onClick={() => handleDelete(params.row._id)} variant="contained" color="secondary">Delete</Button>
-        </>
-      )
+        <Box display="flex" justifyContent="space-between" width="100%">
+          <Button 
+            onClick={() => handleEdit(params.row)} 
+            variant="contained" 
+            color="primary" 
+            style={{ marginRight: '8px' }}
+          >
+            Edit
+          </Button>
+          <Button 
+            onClick={() => handleDelete(params.row._id)} 
+            variant="contained" 
+            color="secondary"
+          >
+            Delete
+          </Button>
+        </Box>
+      ),
     },
   ];
 
@@ -189,6 +204,8 @@ const ProductManagement = () => {
           borderRadius: 2,
           boxShadow: 2,
           marginBottom: 4,
+          maxHeight: '500px', // Adjust the height as needed
+          overflowY: 'auto',  // Enable vertical scrolling if content exceeds max height
         }}>
           <Typography variant="h5" color="primary" align="center">{editingProductId ? 'Edit Product' : 'Add Product'}</Typography>
           <form onSubmit={handleSubmit} noValidate>
@@ -256,49 +273,42 @@ const ProductManagement = () => {
               </Select>
               {errors.brand && <FormHelperText>{errors.brand}</FormHelperText>}
             </FormControl>
-            <TextField
-              type="file"
-              onChange={handleFileChange}
-              fullWidth
-              variant="outlined"
-              margin="normal"
-              error={!!errors.image}
-              helperText={errors.image}
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-              sx={{ marginTop: 2 }}
-            >
-              {editingProductId ? 'Update Product' : 'Add Product'}
-            </Button>
+            <Box marginTop={2}>
+              <input type="file" accept="image/*" onChange={handleFileChange} />
+              {errors.image && <Typography color="error">{errors.image}</Typography>}
+            </Box>
+            <Box marginTop={2}>
+              <Button type="submit" variant="contained" color="primary">
+                {editingProductId ? 'Update Product' : 'Add Product'}
+              </Button>
+              {editingProductId && (
+                <Button 
+                  variant="contained" 
+                  color="secondary" 
+                  onClick={resetForm} 
+                  style={{ marginLeft: '8px' }}
+                >
+                  Cancel
+                </Button>
+              )}
+            </Box>
           </form>
         </Box>
 
         {/* Product Table */}
-        <Box sx={{ height: 400, width: '100%' }}>
+        <Box sx={{ height: 400, width: '100%', backgroundColor: '#fff' }}>
           <DataGrid
             rows={products}
             columns={columns}
             pageSize={5}
+            rowsPerPageOptions={[5]}
             checkboxSelection
             onSelectionModelChange={handleSelectionChange}
+            selectionModel={selectedProducts}
             disableSelectionOnClick
             getRowId={(row) => row._id}
           />
-          <Button
-            variant="contained"
-            color="secondary"
-            sx={{ marginTop: 2 }}
-            onClick={handleBulkDelete}
-            disabled={selectedProducts.length === 0}
-            getRowId={(row) => row._id}
-          >
-            Delete Selected
-          </Button>
-        </Box>
+        </Box>  
       </Box>
     </ThemeProvider>
   );
