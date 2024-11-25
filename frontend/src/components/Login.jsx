@@ -4,12 +4,12 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Checkbox, FormControlLabel, Typography, Link, Box } from '@mui/material';
-import './css/login.css'; // Import the CSS file
+import './css/login.css'; 
 
 const Login = () => {
   const navigate = useNavigate();
 
-  // Formik hook with validation schema using Yup
+ 
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -46,7 +46,7 @@ const Login = () => {
       <Typography variant="h4" gutterBottom align="center">Login</Typography>
 
       <form onSubmit={formik.handleSubmit}>
-        {/* Email Field */}
+  
         <TextField
           fullWidth
           type="email"
@@ -84,7 +84,7 @@ const Login = () => {
           sx={{ display: 'block', marginTop: 2 }}
         />
 
-        {/* Login Button */}
+   
         <Button
           fullWidth
           variant="contained"
@@ -95,14 +95,14 @@ const Login = () => {
           Log in
         </Button>
 
-        {/* Forgot Password */}
+       
         <Box sx={{ textAlign: 'center', marginTop: 2 }}>
           <Link href="/forgot-password" variant="body2">
             Forgot password?
           </Link>
         </Box>
 
-        {/* Register Link */}
+    
         <Box sx={{ textAlign: 'center', marginTop: 2 }}>
           <Typography variant="body2">
             Don't have an account? <Link href="/register">Register</Link>

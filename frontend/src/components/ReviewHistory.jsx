@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './css/ReviewHistory.css';
-import ReviewHistoryModal from './ReviewHistoryModal'; // Import the modal
-
+import ReviewHistoryModal from './ReviewHistoryModal'; 
 const ReviewHistory = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedReview, setSelectedReview] = useState(null); // To pass to the ReviewHistoryModal
+  const [selectedReview, setSelectedReview] = useState(null);
 
-  // Fetch user's review history with status 'reviewed'
+  
   useEffect(() => {
     const fetchReviewHistory = async () => {
       try {
         const token = localStorage.getItem('token');
         const response = await axios.get('http://localhost:5000/api/review/user', {
-          headers: { Authorization: `Bearer ${token}` }, // Make sure you send the token
+          headers: { Authorization: `Bearer ${token}` }, 
         });
 
         if (response.data.length === 0) {
@@ -35,9 +34,9 @@ const ReviewHistory = () => {
     fetchReviewHistory();
   }, []);
 
-  // Handle review edit
+
   const handleEditReview = (review) => {
-    setSelectedReview(review); // Open modal with selected review
+    setSelectedReview(review); 
   };
 
   return (

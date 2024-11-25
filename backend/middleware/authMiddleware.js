@@ -6,8 +6,8 @@ const authMiddleware = async (req, res, next) => {
   if (!token) return res.status(401).json({ message: 'No token, authorization denied' });
 
   try {
-    const decoded = jwt.verify(token, 'your_jwt_secret'); // Replace 'your_jwt_secret' with your actual secret
-    req.user = await User.findById(decoded.userId); // Attach user to the request
+    const decoded = jwt.verify(token, 'your_jwt_secret'); 
+    req.user = await User.findById(decoded.userId); 
     next();
   } catch (error) {
     res.status(401).json({ message: 'Token is not valid' });

@@ -11,7 +11,7 @@ const AllReview = () => {
         const response = await fetch('http://localhost:5000/api/reviews', {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`, // Assuming you're using JWT for auth
+            'Authorization': `Bearer ${localStorage.getItem('token')}`, 
           },
         });
         if (!response.ok) {
@@ -34,7 +34,7 @@ const AllReview = () => {
         const response = await fetch(`http://localhost:5000/api/reviews/${reviewId}`, {
             method: 'DELETE',
             headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`, // Assuming you're using JWT for auth
+              'Authorization': `Bearer ${localStorage.getItem('token')}`, 
             },
           });
       
@@ -42,7 +42,7 @@ const AllReview = () => {
             throw new Error('Failed to delete review');
           }
 
-      // Remove the deleted review from the local state
+   
       setReviews(reviews.filter(review => review._id !== reviewId));
     } catch (err) {
       setError('Failed to delete review');

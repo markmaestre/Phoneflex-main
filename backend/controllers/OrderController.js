@@ -2,6 +2,7 @@ const Order = require('../models/Order');
 const Product = require('../models/Product');
 const User = require('../models/User');
 const transporter = require('../config/emailConfig'); 
+
 exports.createOrder = async (req, res) => {
   const { products } = req.body;
   const userId = req.user._id;
@@ -70,7 +71,7 @@ exports.updateOrderQuantity = async (req, res) => {
     const productInOrder = order.products.find(item => item.productId.toString() === productId);
     if (!productInOrder) return res.status(404).json({ message: 'Product not found in order' });
 
-    // Get product details to check available stock
+
     const product = await Product.findById(productId);
     if (!product) return res.status(404).json({ message: 'Product not found' });
 
@@ -78,10 +79,8 @@ exports.updateOrderQuantity = async (req, res) => {
       return res.status(400).json({ message: `Not enough stock for ${product.name}` });
     }
 
-    // Update the quantity in the order
     productInOrder.quantity = newQuantity;
 
-    // Recalculate total price
     order.totalPrice = order.products.reduce((total, item) => total + item.price * item.quantity, 0);
 
     await order.save();
@@ -114,7 +113,7 @@ exports.deleteOrder = async (req, res) => {
     const order = await Order.findById(orderId);
     if (!order) return res.status(404).json({ message: 'Order not found' });
 
-    // Restore product stock if order is deleted
+    
     for (const item of order.products) {
       const product = await Product.findById(item.productId);
       if (product) {
@@ -123,7 +122,6 @@ exports.deleteOrder = async (req, res) => {
       }
     }
 
-    // Delete the order
     await Order.findByIdAndDelete(orderId);
     res.status(200).json({ message: 'Order deleted successfully' });
 

@@ -17,7 +17,7 @@ const ReviewHistoryModal = ({ reviewId, rating, comment, onClose }) => {
       );
 
       alert(response.data.message);
-      onClose(); // Close modal after submitting
+      onClose(); 
     } catch (err) {
       console.error(err);
       setError('Failed to update review. Please try again.');

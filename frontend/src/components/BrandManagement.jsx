@@ -26,7 +26,7 @@ const BrandManagement = () => {
     formData.append('name', form.name);
     formData.append('description', form.description);
 
-    // Only append image if it's new
+   
     if (form.image) {
       formData.append('image', form.image);
     }
@@ -43,8 +43,8 @@ const BrandManagement = () => {
     });
 
     if (response.ok) {
-      fetchBrands(); // Fetch updated list of brands
-      resetForm(); // Reset the form
+      fetchBrands(); 
+      resetForm(); 
     } else {
       console.error('Error updating/creating brand');
     }
@@ -54,7 +54,7 @@ const BrandManagement = () => {
     setForm({
       name: brand.name,
       description: brand.description,
-      image: null, // Image will not be preloaded
+      image: null, 
     });
     setEditingBrandId(brand._id);
   };
@@ -127,7 +127,7 @@ const BrandManagement = () => {
         </form>
       </div>
 
-      {/* Brand List Section */}
+      {}
       <div
         style={{
           flex: '2',

@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
     },
     img: {
-        type: String, // Path to the profile image
+        type: String, 
     },
     verified: {
         type: Boolean,

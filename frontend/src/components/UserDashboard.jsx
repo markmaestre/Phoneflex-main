@@ -7,7 +7,7 @@ import './css/userDashboard.css';
 const UserDashboard = () => {
     const [user, setUser] = useState(null);
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(true);  // Loading state
+    const [loading, setLoading] = useState(true);  
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -69,7 +69,7 @@ const UserDashboard = () => {
         navigate('/review-history');
     };
 
-    if (loading) return <CircularProgress />;  // Loading spinner if data is still being fetched
+    if (loading) return <CircularProgress />;  
 
     if (error) return <Typography variant="h6" color="error">{error}</Typography>;
 

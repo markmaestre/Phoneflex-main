@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import './css/CheckoutModal.css'; // Import CheckoutModal CSS
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+import './css/CheckoutModal.css'; 
+import 'bootstrap/dist/css/bootstrap.min.css'; 
 
 const CheckoutModal = ({ order, onClose, onStatusUpdated }) => {
   const [paymentMethod, setPaymentMethod] = useState('');
-  const [updatedOrder, setUpdatedOrder] = useState(order); // Local state for the updated order
+  const [updatedOrder, setUpdatedOrder] = useState(order); 
+  
 
-  // State for managing the updated quantity of each product
   const [productQuantities, setProductQuantities] = useState(
     order.products.reduce((acc, item) => {
       acc[item.productId._id] = item.quantity;
@@ -15,7 +15,7 @@ const CheckoutModal = ({ order, onClose, onStatusUpdated }) => {
   );
 
   useEffect(() => {
-    // Sync updatedOrder with props change
+   
     setUpdatedOrder(order);
     setProductQuantities(order.products.reduce((acc, item) => {
       acc[item.productId._id] = item.quantity;
@@ -27,7 +27,7 @@ const CheckoutModal = ({ order, onClose, onStatusUpdated }) => {
     e.preventDefault();
     console.log('Submitting checkout...');
 
-    // Check if paymentMethod is empty before submitting
+  
     if (!paymentMethod) {
       alert('Please select a payment method');
       return;
@@ -51,15 +51,14 @@ const CheckoutModal = ({ order, onClose, onStatusUpdated }) => {
         console.log('Order successfully processed:', data);
         alert('Order has been successfully processed and marked as shipped!');
 
-        // Update the local state with the new paymentMethod and other updated info
         setUpdatedOrder({
           ...order,
-          status: data.order.status, // Assuming the order status is updated on the backend
-          paymentMethod: data.order.paymentMethod, // Update the paymentMethod
+          status: data.order.status, 
+          paymentMethod: data.order.paymentMethod, 
         });
 
-        onStatusUpdated(data.order); // Update order status in the UI
-        onClose(); // Close the modal
+        onStatusUpdated(data.order); 
+        onClose(); 
       } else {
         console.error('Error from backend:', data);
         alert(`Error: ${data.message}`);
@@ -79,7 +78,7 @@ const CheckoutModal = ({ order, onClose, onStatusUpdated }) => {
 
   const updateProductQuantity = async (productId) => {
     const newQuantity = productQuantities[productId];
-    if (newQuantity <= 0) return; // Skip if quantity is invalid
+    if (newQuantity <= 0) return; 
 
     try {
       const response = await fetch('http://localhost:5000/api/orders/:orderId/updateQuantity', {
@@ -98,8 +97,8 @@ const CheckoutModal = ({ order, onClose, onStatusUpdated }) => {
       const data = await response.json();
       if (response.ok) {
         alert('Quantity updated successfully');
-        setUpdatedOrder(data.order); // Update the order in the UI
-        onStatusUpdated(data.order); // Update the UI with the new data
+        setUpdatedOrder(data.order);
+        onStatusUpdated(data.order); 
       } else {
         console.error('Error from backend:', data);
         alert(`Error: ${data.message}`);
@@ -110,10 +109,8 @@ const CheckoutModal = ({ order, onClose, onStatusUpdated }) => {
     }
   };
 
-  // Disable checkout and delete if the order is already shipped
   const isOrderShipped = updatedOrder.status === 'shipped';
-  const isCheckoutDisabled = isOrderShipped || !paymentMethod; // Disable button if order is shipped or payment method not selected
-
+  const isCheckoutDisabled = isOrderShipped || !paymentMethod; 
   return (
     <div className="checkout-modal">
       <div className="modal-dialog modal-lg">

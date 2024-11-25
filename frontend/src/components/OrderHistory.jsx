@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import CheckoutModal from './CheckoutModal'; // Import CheckoutModal
-import ReviewModal from './ReviewModal'; // Import ReviewModal
+import CheckoutModal from './CheckoutModal'; 
+import ReviewModal from './ReviewModal'; 
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, DialogActions, DialogContent, DialogTitle, CircularProgress } from '@mui/material';
 import './css/OrderHistory.css';
 
@@ -9,11 +9,10 @@ const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedOrder, setSelectedOrder] = useState(null); // For Checkout Modal
-  const [confirmDelete, setConfirmDelete] = useState(null); // For Delete Confirmation Modal
-  const [reviewOrder, setReviewOrder] = useState(null); // For Review Modal
+  const [selectedOrder, setSelectedOrder] = useState(null); 
+  const [confirmDelete, setConfirmDelete] = useState(null); 
+  const [reviewOrder, setReviewOrder] = useState(null); 
 
-  // Fetch user's order history
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -22,7 +21,6 @@ const OrderHistory = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // Filter out orders with status 'delivered'
         const filteredOrders = response.data.filter(order => order.status !== 'delivered');
         setOrders(filteredOrders);
         setLoading(false);
@@ -35,7 +33,6 @@ const OrderHistory = () => {
     fetchOrders();
   }, []);
 
-  // Handle order deletion
   const handleDeleteOrder = async (orderId) => {
     try {
       const token = localStorage.getItem('token');
@@ -51,15 +48,15 @@ const OrderHistory = () => {
   };
 
   const handleDeleteConfirmation = (orderId) => {
-    setConfirmDelete(orderId); // Show delete confirmation
+    setConfirmDelete(orderId);
   };
 
   const handleCancelDelete = () => {
-    setConfirmDelete(null); // Cancel delete
+    setConfirmDelete(null); 
   };
 
   const handleReviewClick = (order) => {
-    setReviewOrder(order); // Open review modal
+    setReviewOrder(order); 
   };
 
   const handleStatusUpdated = (updatedOrder) => {
@@ -123,7 +120,7 @@ const OrderHistory = () => {
                     <Button variant="contained" color="secondary" onClick={() => handleReviewClick(order)} sx={{ mr: 1 }}>Review & Ratings</Button>
                   )}
 
-                  {order.status !== 'delivered' && order.status !== 'cancelled' && order.status !== 'pending' && (
+                  {order.status !== 'delivered' && order.status !== 'cancelled' && order.status !== 'pending' && order.status !== 'success' && (
                     <Button variant="contained" color="info" onClick={() => setSelectedOrder(order)}>View Details</Button>
                   )}
                 </TableCell>
@@ -146,12 +143,12 @@ const OrderHistory = () => {
       {reviewOrder && (
         <ReviewModal
           orderId={reviewOrder._id}
-          productId={reviewOrder.products[0].productId} // Pass the correct product ID
+          productId={reviewOrder.products[0].productId} 
           onClose={() => setReviewOrder(null)}
         />
       )}
 
-      {/* Delete Confirmation Modal */}
+      {/* Confirm Delete Dialog */}
       {confirmDelete && (
         <Dialog open={true} onClose={handleCancelDelete}>
           <DialogTitle>Confirm Deletion</DialogTitle>

@@ -71,7 +71,7 @@ const TransactionHistory = () => {
                 ))}
               </td>
               <td>
-                {/* Show Review button only if review is not 'reviewed' */}
+                {}
                 {order.review?.status !== 'reviewed' && (
                   <button
                     onClick={() => handleReviewClick(order)}
@@ -86,11 +86,11 @@ const TransactionHistory = () => {
         </tbody>
       </table>
 
-      {/* Review Modal */}
+      {}
       {reviewOrder && (
         <ReviewModal
           orderId={reviewOrder._id}
-          productId={reviewOrder.products[0].productId} // Pass the correct product ID
+          productId={reviewOrder.products[0].productId} 
           onClose={() => setReviewOrder(null)}
         />
       )}

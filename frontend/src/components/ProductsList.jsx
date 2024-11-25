@@ -19,14 +19,13 @@ const ProductsList = () => {
   useEffect(() => {
     const fetchProductsAndBrands = async () => {
       try {
-        // Fetch products
+       
         const productResponse = await axios.get('http://localhost:5000/api/products');
         setProducts(productResponse.data);
         setFilteredProducts(productResponse.data);
 
-        // Fetch unique brands from the products
         const uniqueBrands = [...new Set(productResponse.data.map((p) => p.brand?.name))];
-        setBrands(uniqueBrands.filter(Boolean)); // Remove undefined/null brands
+        setBrands(uniqueBrands.filter(Boolean)); 
 
         setLoading(false);
       } catch (err) {
@@ -43,15 +42,15 @@ const ProductsList = () => {
     const updatedFilters = { ...filters, [name]: value };
     setFilters(updatedFilters);
 
-    // Filter products
+    
     const filtered = products.filter((product) => {
-      // Filter by maxPrice
+     
       const matchesMaxPrice =
         updatedFilters.maxPrice && !isNaN(updatedFilters.maxPrice)
           ? parseFloat(product.price) <= parseFloat(updatedFilters.maxPrice)
           : true;
 
-      // Filter by brand
+   
       const matchesBrand = updatedFilters.brand
         ? product.brand?.name === updatedFilters.brand
         : true;
@@ -65,11 +64,11 @@ const ProductsList = () => {
             averageRating <= 5
           : true;
 
-      // Combine all conditions
+      
       return matchesMaxPrice && matchesBrand && matchesRatings;
     });
 
-    // Update the filtered products
+   
     setFilteredProducts(filtered);
   };
 
@@ -178,7 +177,7 @@ const ProductsList = () => {
         </Button>
       </div>
 
-      {/* Product List */}
+      {}
       <Grid container spacing={3}>
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => {
@@ -193,7 +192,7 @@ const ProductsList = () => {
                   {product.image && (
                     <CardMedia
                       component="img"
-                      image={product.image} // Cloudinary URL provided by backend
+                      image={product.image} 
                       alt={product.name}
                       height="200"
                     />

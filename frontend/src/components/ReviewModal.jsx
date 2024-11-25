@@ -17,7 +17,7 @@ const ReviewModal = ({ orderId, productId, onClose }) => {
       );
       alert(response.data.message);
 
-      // Close the modal after submission
+      
       onClose();
     } catch (err) {
       console.error(err);

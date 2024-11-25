@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, Typography, CircularProgress } from '@mui/material';
-import './css/profileUpdate.css'; // Import the CSS file
+import './css/profileUpdate.css'; 
 
 const ProfileUpdate = () => {
-    const [error, setError] = useState(''); // To handle errors
-    const [newName, setNewName] = useState(''); // To store the new name
-    const [newImage, setNewImage] = useState(null); // To store the new profile picture file
-    const [loading, setLoading] = useState(false); // To handle the loading state
+    const [error, setError] = useState(''); 
+    const [newName, setNewName] = useState(''); 
+    const [newImage, setNewImage] = useState(null); 
+    const [loading, setLoading] = useState(false); 
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -35,7 +35,7 @@ const ProfileUpdate = () => {
                 }
 
                 const data = await response.json();
-                setNewName(data.user.name); // Pre-fill name with existing user data
+                setNewName(data.user.name); 
             } catch (err) {
                 setError('Error fetching user data: ' + err.message);
                 localStorage.removeItem('token');
@@ -79,17 +79,17 @@ const ProfileUpdate = () => {
     };
 
     const handleFileChange = (e) => {
-        setNewImage(e.target.files[0]); // Set the selected file
+        setNewImage(e.target.files[0]); 
     };
 
-    if (error) return <Typography color="error">{error}</Typography>; // Show error if it exists
+    if (error) return <Typography color="error">{error}</Typography>; 
 
     return (
         <Box sx={{ maxWidth: 500, margin: '0 auto', padding: 3, border: '1px solid #ddd', borderRadius: 2 }}>
             <Typography variant="h4" gutterBottom align="center">Update Your Profile</Typography>
 
             <form onSubmit={handleProfileUpdate}>
-                {/* Name Field */}
+                {}
                 <TextField
                     fullWidth
                     label="Name"
@@ -100,7 +100,7 @@ const ProfileUpdate = () => {
                     margin="normal"
                 />
 
-                {/* Profile Picture Upload */}
+                {}
                 <Box sx={{ marginTop: 2 }}>
                     <input
                         accept="image/*"
@@ -116,7 +116,7 @@ const ProfileUpdate = () => {
                     </label>
                 </Box>
 
-                {/* Submit Button */}
+                {}
                 <Box sx={{ marginTop: 2, textAlign: 'center' }}>
                     <Button
                         fullWidth

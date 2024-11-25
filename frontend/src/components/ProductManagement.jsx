@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Button, TextField, Box, Typography, Select, MenuItem, FormControl, InputLabel, FormHelperText, ThemeProvider, createTheme } from '@mui/material';
 
-// Create a light theme (without any dark references)
+
 const theme = createTheme({
   palette: {
-    mode: 'light',  // Set the theme mode to light
+    mode: 'light',  
     primary: {
-      main: '#1976d2', // You can customize the color palette
+      main: '#1976d2', 
     },
     secondary: {
       main: '#dc004e',
@@ -121,7 +121,7 @@ const ProductManagement = () => {
       const data = await response.json();
       if (response.ok) {
         alert(`${data.message}`);
-        fetchProducts(); // Reload the product list
+        fetchProducts(); 
       } else {
         alert(`Error: ${data.message}`);
       }
@@ -132,7 +132,7 @@ const ProductManagement = () => {
   };
 
   const handleSelectionChange = (newSelection) => {
-    setSelectedProducts(newSelection.rowIds); // Ensure this correctly updates the selected product IDs
+    setSelectedProducts(newSelection.rowIds); 
   };
 
   const resetForm = () => {
@@ -147,12 +147,12 @@ const ProductManagement = () => {
       headerName: 'Image',
       width: 100,
       renderCell: (params) => {
-        const imageUrl = params.row.image;  // Assuming `image` is a field in your product data
+        const imageUrl = params.row.image;  
         const validImageUrl = imageUrl
-          ? imageUrl.startsWith('http')  // Ensure it starts with a valid URL prefix
+          ? imageUrl.startsWith('http') 
             ? imageUrl
-            : `http://localhost:5000/uploads/${imageUrl}` // Construct URL for local images
-          : 'http://localhost:5000/uploads/default-placeholder.jpg'; // Fallback image if no valid URL
+            : `http://localhost:5000/uploads/${imageUrl}` 
+          : 'http://localhost:5000/uploads/default-placeholder.jpg'; 
 
         return (
           <img
@@ -195,17 +195,17 @@ const ProductManagement = () => {
   ];
 
   return (
-    <ThemeProvider theme={theme}>  {/* Apply the light theme here */}
+    <ThemeProvider theme={theme}>  {}
       <Box sx={{ padding: 4, backgroundColor: '#e0f7fa' }}>
-        {/* Add Product Section */}
+        {}
         <Box sx={{
           padding: 4,
           backgroundColor: '#ffffff',
           borderRadius: 2,
           boxShadow: 2,
           marginBottom: 4,
-          maxHeight: '500px', // Adjust the height as needed
-          overflowY: 'auto',  // Enable vertical scrolling if content exceeds max height
+          maxHeight: '500px', 
+          overflowY: 'auto',  
         }}>
           <Typography variant="h5" color="primary" align="center">{editingProductId ? 'Edit Product' : 'Add Product'}</Typography>
           <form onSubmit={handleSubmit} noValidate>
@@ -295,7 +295,7 @@ const ProductManagement = () => {
           </form>
         </Box>
 
-        {/* Product Table */}
+        {}
         <Box sx={{ height: 400, width: '100%', backgroundColor: '#fff' }}>
           <DataGrid
             rows={products}

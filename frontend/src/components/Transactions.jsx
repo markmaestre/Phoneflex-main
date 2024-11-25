@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, Spinner } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './css/transactions.css'; // Import your CSS file
+import './css/transactions.css'; 
 
 const Transactions = () => {
   const [orders, setOrders] = useState([]);
@@ -62,7 +62,7 @@ const Transactions = () => {
   };
 
   const handleBackClick = () => {
-    // Navigate back to the user dashboard using window.location.href
+
     window.location.href = '/admin-dashboard';
   };
 
@@ -102,7 +102,7 @@ const Transactions = () => {
                       : order.status === 'cancelled'
                       ? '#f8d7da'
                       : order.status === 'success'
-                      ? '#c8e6c9' // Green for success
+                      ? '#c8e6c9' 
                       : 'white',
                 }}
               >
