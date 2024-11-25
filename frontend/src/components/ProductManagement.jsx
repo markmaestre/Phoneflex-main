@@ -1,6 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button } from '@mui/material';
+import { Button, TextField, Box, Typography, Select, MenuItem, FormControl, InputLabel, FormHelperText, ThemeProvider, createTheme } from '@mui/material';
+
+// Create a light theme (without any dark references)
+const theme = createTheme({
+  palette: {
+    mode: 'light',  // Set the theme mode to light
+    primary: {
+      main: '#1976d2', // You can customize the color palette
+    },
+    secondary: {
+      main: '#dc004e',
+    },
+  },
+});
 
 const ProductManagement = () => {
   const [products, setProducts] = useState([]);
@@ -8,7 +21,7 @@ const ProductManagement = () => {
   const [form, setForm] = useState({ name: '', description: '', price: '', brand: '', image: null, stocks: 0 });
   const [errors, setErrors] = useState({});
   const [editingProductId, setEditingProductId] = useState(null);
-  const [selectedProducts, setSelectedProducts] = useState([]); // For storing selected products to delete
+  const [selectedProducts, setSelectedProducts] = useState([]);
 
   useEffect(() => {
     fetchProducts();
@@ -120,7 +133,6 @@ const ProductManagement = () => {
 
   const handleSelectionChange = (newSelection) => {
     setSelectedProducts(newSelection.rowIds); // Ensure this correctly updates the selected product IDs
-    console.log('Selected Products:', newSelection.rowIds); // Debugging
   };
 
   const resetForm = () => {
@@ -135,8 +147,11 @@ const ProductManagement = () => {
       headerName: 'Image',
       width: 100,
       renderCell: (params) => {
-        const imageUrl = params.value;  // The image URL from the row data
-        const validImageUrl = imageUrl && imageUrl.startsWith('http') ? imageUrl : 'http://localhost:5000/uploads/default-placeholder.jpg'; // fallback image
+        const imageUrl = params.row.image;  // Assuming `image` is a field in your product data
+        const validImageUrl = imageUrl && imageUrl.startsWith('https://res.cloudinary.com')
+          ? imageUrl
+          : 'http://localhost:5000/uploads/default-placeholder.jpg'; // Fallback image if no valid URL
+
         return (
           <img
             src={validImageUrl}
@@ -165,95 +180,127 @@ const ProductManagement = () => {
   ];
 
   return (
-    <div style={{ padding: '20px', backgroundColor: '#e0f7fa' }}>
-      {/* Add Product Section */}
-      <div style={{
-        padding: '20px',
-        backgroundColor: '#ffffff',
-        borderRadius: '8px',
-        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-        marginBottom: '30px',
-      }}>
-        <h3 style={{ color: '#0288d1', textAlign: 'center' }}>{editingProductId ? 'Edit Product' : 'Add Product'}</h3>
-        <form onSubmit={handleSubmit} noValidate>
-          {/* Form Inputs */}
-          <input
-            name="name"
-            placeholder="Product Name"
-            value={form.name}
-            onChange={handleInputChange}
-            style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
-          />
-          <textarea
-            name="description"
-            placeholder="Description"
-            value={form.description}
-            onChange={handleInputChange}
-            style={{ width: '100%', padding: '10px', marginBottom: '10px', resize: 'vertical' }}
-          />
-          <input
-            name="price"
-            type="number"
-            placeholder="Price"
-            value={form.price}
-            onChange={handleInputChange}
-            style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
-          />
-          <input
-            name="stocks"
-            type="number"
-            placeholder="Stocks"
-            value={form.stocks}
-            onChange={handleInputChange}
-            style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
-          />
-          <select
-            name="brand"
-            value={form.brand}
-            onChange={handleInputChange}
-            style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
-          >
-            <option value="">Select Brand</option>
-            {brands.map((brand) => (
-              <option key={brand._id} value={brand._id}>{brand.name}</option>
-            ))}
-          </select>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            style={{ marginBottom: '10px' }}
-          />
-          <Button type="submit" variant="contained" color="primary">{editingProductId ? 'Update Product' : 'Add Product'}</Button>
-        </form>
-      </div>
+    <ThemeProvider theme={theme}>  {/* Apply the light theme here */}
+      <Box sx={{ padding: 4, backgroundColor: '#e0f7fa' }}>
+        {/* Add Product Section */}
+        <Box sx={{
+          padding: 4,
+          backgroundColor: '#ffffff',
+          borderRadius: 2,
+          boxShadow: 2,
+          marginBottom: 4,
+        }}>
+          <Typography variant="h5" color="primary" align="center">{editingProductId ? 'Edit Product' : 'Add Product'}</Typography>
+          <form onSubmit={handleSubmit} noValidate>
+            <TextField
+              name="name"
+              label="Product Name"
+              value={form.name}
+              onChange={handleInputChange}
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              error={!!errors.name}
+              helperText={errors.name}
+            />
+            <TextField
+              name="description"
+              label="Description"
+              value={form.description}
+              onChange={handleInputChange}
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              multiline
+              rows={4}
+              error={!!errors.description}
+              helperText={errors.description}
+            />
+            <TextField
+              name="price"
+              label="Price"
+              type="number"
+              value={form.price}
+              onChange={handleInputChange}
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              error={!!errors.price}
+              helperText={errors.price}
+            />
+            <TextField
+              name="stocks"
+              label="Stock Amount"
+              type="number"
+              value={form.stocks}
+              onChange={handleInputChange}
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              error={!!errors.stocks}
+              helperText={errors.stocks}
+            />
+            <FormControl fullWidth variant="outlined" margin="normal" error={!!errors.brand}>
+              <InputLabel>Brand</InputLabel>
+              <Select
+                name="brand"
+                value={form.brand}
+                onChange={handleInputChange}
+                label="Brand"
+              >
+                {brands.map((brand) => (
+                  <MenuItem key={brand._id} value={brand._id}>
+                    {brand.name}
+                  </MenuItem>
+                ))}
+              </Select>
+              {errors.brand && <FormHelperText>{errors.brand}</FormHelperText>}
+            </FormControl>
+            <TextField
+              type="file"
+              onChange={handleFileChange}
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              error={!!errors.image}
+              helperText={errors.image}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ marginTop: 2 }}
+            >
+              {editingProductId ? 'Update Product' : 'Add Product'}
+            </Button>
+          </form>
+        </Box>
 
-      {/* Product List Section */}
-      <div style={{
-        padding: '20px',
-        backgroundColor: '#ffffff',
-        borderRadius: '8px',
-        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-      }}>
-        <h3 style={{ color: '#0288d1', textAlign: 'center' }}>Product List</h3>
-        {/* Bulk Delete Button */}
-        <Button onClick={handleBulkDelete} variant="contained" color="secondary" style={{ marginBottom: '10px' }}>
-          Bulk Delete
-        </Button>
-
-        {/* DataGrid */}
-        <div style={{ height: '400px', width: '100%', overflowY: 'auto' }}>
+        {/* Product Table */}
+        <Box sx={{ height: 400, width: '100%' }}>
           <DataGrid
             rows={products}
             columns={columns}
             pageSize={5}
             checkboxSelection
             onSelectionModelChange={handleSelectionChange}
+            disableSelectionOnClick
             getRowId={(row) => row._id}
           />
-        </div>
-      </div>
-    </div>
+          <Button
+            variant="contained"
+            color="secondary"
+            sx={{ marginTop: 2 }}
+            onClick={handleBulkDelete}
+            disabled={selectedProducts.length === 0}
+            getRowId={(row) => row._id}
+          >
+            Delete Selected
+          </Button>
+        </Box>
+      </Box>
+    </ThemeProvider>
   );
 };
 

@@ -61,6 +61,37 @@ exports.getAllOrders = async (req, res) => {
   }
 };
 
+exports.updateOrderQuantity = async (req, res) => {
+  const { orderId, productId, newQuantity } = req.body;
+  try {
+    const order = await Order.findById(orderId);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    const productInOrder = order.products.find(item => item.productId.toString() === productId);
+    if (!productInOrder) return res.status(404).json({ message: 'Product not found in order' });
+
+    // Get product details to check available stock
+    const product = await Product.findById(productId);
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+
+    if (product.stocks < newQuantity) {
+      return res.status(400).json({ message: `Not enough stock for ${product.name}` });
+    }
+
+    // Update the quantity in the order
+    productInOrder.quantity = newQuantity;
+
+    // Recalculate total price
+    order.totalPrice = order.products.reduce((total, item) => total + item.price * item.quantity, 0);
+
+    await order.save();
+
+    res.status(200).json({ message: 'Order quantity updated successfully', order });
+  } catch (error) {
+    res.status(400).json({ message: 'Error updating order quantity', error: error.message });
+  }
+};
+
 exports.getUserOrders = async (req, res) => {
   try {
     const orders = await Order.find({ userId: req.user._id })

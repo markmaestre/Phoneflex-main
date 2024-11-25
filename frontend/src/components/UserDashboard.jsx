@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button, Box, Typography, Avatar, List, ListItem, ListItemText, Divider, CircularProgress } from '@mui/material';
+import { Settings } from '@mui/icons-material';
 import './css/userDashboard.css';
 
 const UserDashboard = () => {
     const [user, setUser] = useState(null);
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(true);  // Loading state
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -30,10 +33,12 @@ const UserDashboard = () => {
 
                 const data = await response.json();
                 setUser(data.user);
+                setLoading(false);
             } catch (err) {
                 setError(err.message);
                 localStorage.removeItem('token');
                 navigate('/login');
+                setLoading(false);
             }
         };
 
@@ -52,44 +57,75 @@ const UserDashboard = () => {
         navigate('/products');
     };
 
-    const handleNavigateToCart = () => {
+    const handleNavigateToOrderHistory = () => {
         navigate('/order-history');
     };
 
-    if (error) return <p className="error">{error}</p>;
+    const handleNavigateToTransactions = () => {
+        navigate('/transaction-history');
+    };
+
+    const handleNavigateToReviewHistory = () => {
+        navigate('/review-history');
+    };
+
+    if (loading) return <CircularProgress />;  // Loading spinner if data is still being fetched
+
+    if (error) return <Typography variant="h6" color="error">{error}</Typography>;
 
     return (
-        <div className="dashboard-container">
-            <aside className="sidebar">
-                <div className="profile-section">
-                    <div className="profile-picture">
-                        {user?.img ? (
-                            <img src={`http://localhost:5000/${user.img}`} alt="Profile" />
-                        ) : (
-                            <img src="profile_placeholder.png" alt="Profile" />
-                        )}
-                    </div>
-                    <h3>{user ? user.name : 'User'}</h3>
-                    <button
-                        onClick={() => navigate('/update-profile')} 
-                        className="settings-button"
+        <Box sx={{ display: 'flex', height: '100vh' }}>
+            {/* Sidebar */}
+            <Box sx={{ width: 250, bgcolor: 'background.paper', padding: 2 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <Avatar 
+                        src={user?.img ? `http://localhost:5000/${user.img}` : 'profile_placeholder.png'}
+                        sx={{ width: 100, height: 100, mb: 2 }} 
+                    />
+                    <Typography variant="h6">{user?.name}</Typography>
+                    <Button
+                        onClick={() => navigate('/update-profile')}
+                        variant="contained"
+                        color="primary"
+                        sx={{ mt: 2, width: '100%' }}
+                        startIcon={<Settings />}
                     >
                         Settings
-                    </button>
-                </div>
-                <nav>
-                    <ul>
-                        <li>Dashboard</li>
-                        <li onClick={handleNavigateToProducts} style={{ cursor: 'pointer' }}>Products</li>
-                        <li onClick={handleNavigateToCart} style={{ cursor: 'pointer' }}>order-history</li> {}
-                        <li>Transaction</li>
-                        <li>Cart History</li>
-                        <li>Review and Ratings</li>
-                    </ul>
-                </nav>
-                <button onClick={handleLogout} className="logout-button">Logout</button>
-            </aside>
-        </div>
+                    </Button>
+                </Box>
+                <Divider sx={{ my: 2 }} />
+                <List>
+                    <ListItem button onClick={handleNavigateToProducts}>
+                        <ListItemText primary="Dashboard Products" />
+                    </ListItem>
+                    <ListItem button onClick={handleNavigateToOrderHistory}>
+                        <ListItemText primary="Order History" />
+                    </ListItem>
+                    <ListItem button onClick={handleNavigateToTransactions}>
+                        <ListItemText primary="Transaction History" />
+                    </ListItem>
+                    <ListItem button onClick={handleNavigateToReviewHistory}>
+                        <ListItemText primary="Review History" />
+                    </ListItem>
+                </List>
+                <Button
+                    onClick={handleLogout}
+                    variant="outlined"
+                    color="secondary"
+                    sx={{ mt: 2, width: '100%' }}
+                >
+                    Logout
+                </Button>
+            </Box>
+
+            {/* Main Content */}
+            <Box sx={{ flexGrow: 1, bgcolor: '#f5f5f5', padding: 3 }}>
+                <Typography variant="h4" gutterBottom>
+                    Welcome to your Dashboard, {user?.name}
+                </Typography>
+                {/* Add other content here */}
+            </Box>
+        </Box>
     );
 };
 

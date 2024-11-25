@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaHome, FaSignOutAlt, FaStar, FaCalendar, FaUsers, FaGamepad } from 'react-icons/fa';
-import logo from './img/logo.png';
+import logo from './img/phoneflex.png';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, AppBar, Toolbar, Typography, IconButton, Button, Grid, Box, Card, CardContent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import './css/adminDashboard.css';
 
 const AdminDashboard = () => {
@@ -75,111 +77,140 @@ const AdminDashboard = () => {
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
-      <div className="sidebar">
-        <div className="sidebar-item" onClick={() => navigate('/home')}>
-          <FaHome className="sidebar-icon" />
-          Dashboard
-        </div>
-        <div className="sidebar-item" onClick={() => navigate('/events')}>
-          <FaCalendar className="sidebar-icon" />
-          Events
-        </div>
-        <div className="sidebar-item" onClick={() => navigate('/games')}>
-          <FaGamepad className="sidebar-icon" />
-          Games
-        </div>
-        <div className="sidebar-item" onClick={() => navigate('/users')}>
-          <FaUsers className="sidebar-icon" />
-          Users
-        </div>
-        <div className="sidebar-item" onClick={() => navigate('/ratings')}>
-          <FaStar className="sidebar-icon" />
-          Ratings
-        </div>
-
-        <div className="sidebar-item" onClick={() => navigate('/transactions')}>
-        <FaUsers className="sidebar-icon" />
-          Transactions
-        </div> 
-        <div className="sidebar-item" onClick={() => navigate('/brand-management')}>
-          <FaStar className="sidebar-icon" />
-          Brand Management
-        </div>
-        {/* Add Product Management Link */}
-        <div className="sidebar-item" onClick={() => navigate('/product-management')}>
-          <FaGamepad className="sidebar-icon" />
-          Product Management
-        </div>
-        <div className="sidebar-item" onClick={handleLogout}>
-          <FaSignOutAlt className="sidebar-icon" />
-          Logout
-        </div>
-      </div>
+      <Drawer
+        sx={{
+          width: 240,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: 240,
+            boxSizing: 'border-box',
+          },
+        }}
+        variant="permanent"
+        anchor="left"
+      >
+        <List>
+          <ListItem button onClick={() => navigate('/all-reviews')}>
+            <ListItemIcon><FaStar /></ListItemIcon>
+            <ListItemText primary="Review and Ratings Management" />
+          </ListItem>
+          <ListItem button onClick={() => navigate('/transactions')}>
+            <ListItemIcon><FaUsers /></ListItemIcon>
+            <ListItemText primary="Transactions Management" />
+          </ListItem>
+          <ListItem button onClick={() => navigate('/brand-management')}>
+            <ListItemIcon><FaStar /></ListItemIcon>
+            <ListItemText primary="Brand Management" />
+          </ListItem>
+          <ListItem button onClick={() => navigate('/product-management')}>
+            <ListItemIcon><FaGamepad /></ListItemIcon>
+            <ListItemText primary="Product Management" />
+          </ListItem>
+          <ListItem button onClick={() => navigate('/Chart')}>
+            <ListItemIcon><FaGamepad /></ListItemIcon>
+            <ListItemText primary="Charts Management" />
+          </ListItem>
+          <ListItem button onClick={handleLogout}>
+            <ListItemIcon><FaSignOutAlt /></ListItemIcon>
+            <ListItemText primary="Logout" />
+          </ListItem>
+        </List>
+      </Drawer>
 
       {/* Main Content */}
-      <div className="content-wrapper">
-        <header className="header">
-          <div className="right-section">
-            <img src={logo} alt="Logo" className="logo" />
-            <span className="user-name">PhoneFlex</span>
-          </div>
-        </header>
-        <main className="main-content">
-          <h2 className="main-title">Admin Dashboard</h2>
-          <div className="box-container">
-            <div className="box pink">
-              <span>Ratings</span>
-              <FaStar />
-            </div>
-            <div className="box pink">
-              <span>Future Events</span>
-              <FaCalendar />
-            </div>
-            <div className="box pink">
-              <span>Users</span>
-              <FaUsers />
-              <div className="user-stats">
-                <p>{userCount} Users</p>
-                <p className="percentage-change">
-                  {userChangePercentage >= 0 ? '↑' : '↓'} {Math.abs(userChangePercentage)}% Since last week
-                </p>
-              </div>
-            </div>
-            <div className="box pink">
-              <span>Future Games</span>
-              <FaGamepad />
-            </div>
-          </div>
-          <div className="user-management">
-            <h3>Manage Users</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Address</th>
-                  <th>Role</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>{user.address}</td>
-                    <td>{user.role}</td>
-                    <td>
-                      <button className="edit-btn">Edit</button>
-                      <button className="delete-btn" onClick={() => handleDelete(user._id)}>Delete</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </main>
-      </div>
+      <Box sx={{ display: 'flex' }}>
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            bgcolor: 'background.default',
+            p: 3,
+          }}
+        >
+          <AppBar position="static">
+            <Toolbar>
+              <img src={logo} alt="Logo" style={{ height: 40, marginRight: '16px' }} />
+              <Typography variant="h6">PhoneFlex</Typography>
+            </Toolbar>
+          </AppBar>
+
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6} md={3}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6">Ratings</Typography>
+                  <FaStar />
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6">Product</Typography>
+                  <FaCalendar />
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6">Users</Typography>
+                  <FaUsers />
+                  <Box sx={{ mt: 1 }}>
+                    <Typography variant="body2">{userCount} Users</Typography>
+                    <Typography variant="body2" color={userChangePercentage >= 0 ? 'green' : 'red'}>
+                      {userChangePercentage >= 0 ? '↑' : '↓'} {Math.abs(userChangePercentage)}% Since last week
+                    </Typography>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6">Charts</Typography>
+                  <FaGamepad />
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+
+          <Box sx={{ mt: 3 }}>
+            <Typography variant="h6" gutterBottom>
+              Manage Users
+            </Typography>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Address</TableCell>
+                    <TableCell>Role</TableCell>
+                    <TableCell>Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {users.map((user) => (
+                    <TableRow key={user._id}>
+                      <TableCell>{user.name}</TableCell>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell>{user.address}</TableCell>
+                      <TableCell>{user.role}</TableCell>
+                      <TableCell>
+                        <Button variant="outlined" color="primary" sx={{ mr: 1 }}>Edit</Button>
+                        <Button variant="outlined" color="secondary" onClick={() => handleDelete(user._id)}>
+                          Delete
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </Box>
+      </Box>
     </div>
   );
 };

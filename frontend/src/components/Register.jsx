@@ -3,7 +3,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import './css/register.css'; 
+import { TextField, Button, Select, MenuItem, InputLabel, FormControl, FormHelperText, Box } from "@mui/material";
+import './css/register.css';
 
 function RegisterForm() {
     const navigate = useNavigate();
@@ -55,101 +56,108 @@ function RegisterForm() {
     });
 
     return (
-        <form onSubmit={formik.handleSubmit} className="register-form">
+        <Box component="form" onSubmit={formik.handleSubmit} className="register-form" sx={{ maxWidth: 400, margin: '0 auto', padding: 3 }}>
             <h2>Register</h2>
 
-            <div className="form-field">
-                <label>Name</label>
-                <input
-                    type="text"
-                    name="name"
-                    value={formik.values.name}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                />
-                {formik.touched.name && formik.errors.name && <span className="error">{formik.errors.name}</span>}
-            </div>
+            <TextField
+                fullWidth
+                label="Name"
+                name="name"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
+                sx={{ marginBottom: 2 }}
+            />
 
-            <div className="form-field">
-                <label>Email</label>
-                <input
-                    type="email"
-                    name="email"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                />
-                {formik.touched.email && formik.errors.email && <span className="error">{formik.errors.email}</span>}
-            </div>
+            <TextField
+                fullWidth
+                label="Email"
+                name="email"
+                type="email"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+                sx={{ marginBottom: 2 }}
+            />
 
-            <div className="form-field">
-                <label>Password</label>
-                <input
-                    type="password"
-                    name="password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                />
-                {formik.touched.password && formik.errors.password && <span className="error">{formik.errors.password}</span>}
-            </div>
+            <TextField
+                fullWidth
+                label="Password"
+                name="password"
+                type="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.password && Boolean(formik.errors.password)}
+                helperText={formik.touched.password && formik.errors.password}
+                sx={{ marginBottom: 2 }}
+            />
 
-            <div className="form-field">
-                <label>Confirm Password</label>
-                <input
-                    type="password"
-                    name="confirmPassword"
-                    value={formik.values.confirmPassword}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                />
-                {formik.touched.confirmPassword && formik.errors.confirmPassword && <span className="error">{formik.errors.confirmPassword}</span>}
-            </div>
+            <TextField
+                fullWidth
+                label="Confirm Password"
+                name="confirmPassword"
+                type="password"
+                value={formik.values.confirmPassword}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
+                helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                sx={{ marginBottom: 2 }}
+            />
 
-            <div className="form-field">
-                <label>Role</label>
-                <select
+            <FormControl fullWidth sx={{ marginBottom: 2 }} error={formik.touched.role && Boolean(formik.errors.role)}>
+                <InputLabel>Role</InputLabel>
+                <Select
                     name="role"
+                    value={formik.values.role}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.role}
+                    label="Role"
                 >
-                    <option value="">Select Role</option>
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
-                </select>
-                {formik.touched.role && formik.errors.role && <span className="error">{formik.errors.role}</span>}
-            </div>
+                    <MenuItem value="">Select Role</MenuItem>
+                    <MenuItem value="user">User</MenuItem>
+                    <MenuItem value="admin">Admin</MenuItem>
+                </Select>
+                {formik.touched.role && formik.errors.role && <FormHelperText>{formik.errors.role}</FormHelperText>}
+            </FormControl>
 
             <div className="form-field">
-                <label>Profile Image</label>
                 <input
                     type="file"
                     name="image"
                     accept="image/*"
-                    onChange={(event) => {
-                        formik.setFieldValue("image", event.currentTarget.files[0]);
-                    }}
+                    onChange={(event) => formik.setFieldValue("image", event.currentTarget.files[0])}
                 />
                 {formik.touched.image && formik.errors.image && <span className="error">{formik.errors.image}</span>}
             </div>
 
-            <div className="form-field">
-                <label>Address</label>
-                <input
-                    type="text"
-                    name="address"
-                    value={formik.values.address}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                />
-                {formik.touched.address && formik.errors.address && <span className="error">{formik.errors.address}</span>}
-            </div>
+            <TextField
+                fullWidth
+                label="Address"
+                name="address"
+                value={formik.values.address}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.address && Boolean(formik.errors.address)}
+                helperText={formik.touched.address && formik.errors.address}
+                sx={{ marginBottom: 2 }}
+            />
 
-            <button type="submit" disabled={formik.isSubmitting} className="submit-button">
+            <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                disabled={formik.isSubmitting}
+            >
                 {formik.isSubmitting ? "Registering..." : "Register"}
-            </button>
-        </form>
+            </Button>
+        </Box>
     );
 }
 

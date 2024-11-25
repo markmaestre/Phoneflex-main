@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './css/profileUpdate.css';
+import { TextField, Button, Box, Typography, CircularProgress } from '@mui/material';
+import './css/profileUpdate.css'; // Import the CSS file
 
 const ProfileUpdate = () => {
     const [error, setError] = useState(''); // To handle errors
     const [newName, setNewName] = useState(''); // To store the new name
     const [newImage, setNewImage] = useState(null); // To store the new profile picture file
+    const [loading, setLoading] = useState(false); // To handle the loading state
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -46,6 +48,7 @@ const ProfileUpdate = () => {
 
     const handleProfileUpdate = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         const token = localStorage.getItem('token');
         const formData = new FormData();
@@ -70,6 +73,8 @@ const ProfileUpdate = () => {
             alert('Profile updated successfully!');
         } catch (error) {
             alert(error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -77,30 +82,54 @@ const ProfileUpdate = () => {
         setNewImage(e.target.files[0]); // Set the selected file
     };
 
-    if (error) return <p className="error">{error}</p>; // Show error if it exists
+    if (error) return <Typography color="error">{error}</Typography>; // Show error if it exists
 
     return (
-        <div className="profile-update-container">
-            <h2>Update Your Profile</h2>
+        <Box sx={{ maxWidth: 500, margin: '0 auto', padding: 3, border: '1px solid #ddd', borderRadius: 2 }}>
+            <Typography variant="h4" gutterBottom align="center">Update Your Profile</Typography>
+
             <form onSubmit={handleProfileUpdate}>
-                <div className="form-group">
-                    <label>Name:</label>
+                {/* Name Field */}
+                <TextField
+                    fullWidth
+                    label="Name"
+                    variant="outlined"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    placeholder="Enter your name"
+                    margin="normal"
+                />
+
+                {/* Profile Picture Upload */}
+                <Box sx={{ marginTop: 2 }}>
                     <input
-                        type="text"
-                        value={newName}
-                        onChange={(e) => setNewName(e.target.value)}
-                        placeholder="Enter your name"
+                        accept="image/*"
+                        type="file"
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }}
+                        id="upload-image"
                     />
-                </div>
-                <div className="form-group">
-                    <label>Profile Picture:</label>
-                    <input type="file" onChange={handleFileChange} />
-                </div>
-                <button type="submit" className="update-button">
-                    Update Profile
-                </button>
+                    <label htmlFor="upload-image">
+                        <Button variant="contained" color="secondary" component="span">
+                            Upload Profile Picture
+                        </Button>
+                    </label>
+                </Box>
+
+                {/* Submit Button */}
+                <Box sx={{ marginTop: 2, textAlign: 'center' }}>
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        disabled={loading}
+                    >
+                        {loading ? <CircularProgress size={24} color="inherit" /> : 'Update Profile'}
+                    </Button>
+                </Box>
             </form>
-        </div>
+        </Box>
     );
 };
 

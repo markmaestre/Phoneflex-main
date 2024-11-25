@@ -8,6 +8,7 @@ const brandRoutes = require('./routes/brandRoutes');
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const salesRoutes = require('./routes/salesRoutes');
 
 
 const app = express();
@@ -31,6 +32,7 @@ app.use('/api', brandRoutes);
 app.use('/api', productRoutes);
 app.use('/api', orderRoutes); // Order route
 app.use('/api', reviewRoutes);
+app.use('/api', salesRoutes);
 
 
 // Start the server

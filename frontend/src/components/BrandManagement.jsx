@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { Button, TextField, Typography } from '@mui/material';
 
 const BrandManagement = () => {
   const [brands, setBrands] = useState([]);
@@ -74,41 +72,6 @@ const BrandManagement = () => {
     setEditingBrandId(null);
   };
 
-  const columns = [
-    { field: 'name', headerName: 'Name', width: 200 },
-    { field: 'description', headerName: 'Description', width: 300 },
-    {
-      field: 'image',
-      headerName: 'Image',
-      width: 150,
-      renderCell: (params) => <img src={params.value} alt={params.row.name} style={{ width: '100px', height: 'auto' }} />,
-    },
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      width: 200,
-      renderCell: (params) => (
-        <>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleEdit(params.row)}
-            style={{ marginRight: '5px' }}
-          >
-            Edit
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => handleDelete(params.row._id)}
-          >
-            Delete
-          </Button>
-        </>
-      ),
-    },
-  ];
-
   return (
     <div style={{ display: 'flex', padding: '20px', backgroundColor: '#e0f7fa', minHeight: '100vh' }}>
       {/* Form Section */}
@@ -122,42 +85,43 @@ const BrandManagement = () => {
           boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
         }}
       >
-        <Typography variant="h5" color="primary" gutterBottom>
-          {editingBrandId ? 'Edit Brand' : 'Create Brand'}
-        </Typography>
+        <h3>{editingBrandId ? 'Edit Brand' : 'Create Brand'}</h3>
         <form onSubmit={handleSubmit}>
-          <TextField
+          <label htmlFor="name">Brand Name</label>
+          <input
+            type="text"
             name="name"
-            label="Brand Name"
             value={form.name}
             onChange={handleInputChange}
-            fullWidth
             required
-            style={{ marginBottom: '10px' }}
+            style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
           />
-          <TextField
+
+          <label htmlFor="description">Description</label>
+          <input
+            type="text"
             name="description"
-            label="Description"
             value={form.description}
             onChange={handleInputChange}
-            fullWidth
             required
-            style={{ marginBottom: '10px' }}
+            style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
           />
+
           <input
             type="file"
             accept="image/*"
             onChange={handleFileChange}
             style={{ marginBottom: '10px' }}
           />
+
           <div>
-            <Button variant="contained" color="primary" type="submit" style={{ marginRight: '10px' }}>
+            <button type="submit" style={{ padding: '10px 20px', marginRight: '10px' }}>
               {editingBrandId ? 'Update Brand' : 'Create Brand'}
-            </Button>
+            </button>
             {editingBrandId && (
-              <Button variant="contained" color="default" onClick={resetForm}>
+              <button type="button" onClick={resetForm} style={{ padding: '10px 20px' }}>
                 Cancel
-              </Button>
+              </button>
             )}
           </div>
         </form>
@@ -175,18 +139,47 @@ const BrandManagement = () => {
           overflowY: 'auto',
         }}
       >
-        <Typography variant="h5" color="primary" gutterBottom>
-          Your Brands
-        </Typography>
-        <div style={{ height: 400, width: '100%' }}>
-          <DataGrid
-            rows={brands}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-            disableSelectionOnClick
-            getRowId={(row) => row._id}
-          />
+        <h3>Your Brands</h3>
+        <div style={{ height: '400px', overflowY: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {brands.map((brand) => (
+                <tr key={brand._id}>
+                  <td>{brand.name}</td>
+                  <td>{brand.description}</td>
+                  <td>
+                    <img
+                      src={brand.image}
+                      alt={brand.name}
+                      style={{ width: '100px', height: 'auto' }}
+                    />
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => handleEdit(brand)}
+                      style={{ marginRight: '5px', padding: '5px 10px' }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(brand._id)}
+                      style={{ padding: '5px 10px', backgroundColor: 'red', color: 'white' }}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

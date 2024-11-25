@@ -1,73 +1,115 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { TextField, Button, Checkbox, FormControlLabel, Typography, Link, Box } from '@mui/material';
 import './css/login.css'; // Import the CSS file
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
   const navigate = useNavigate();
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  // Formik hook with validation schema using Yup
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .email('Invalid email address')
+        .required('Email is required'),
+      password: Yup.string().required('Password is required'),
+    }),
+    onSubmit: async (values) => {
+      try {
+        const res = await axios.post('http://localhost:5000/api/auth/login', values);
+        const { token, user } = res.data;
 
-    setError('');
-    try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-      const { token, user } = res.data;
+        localStorage.setItem('token', token);
 
-      localStorage.setItem('token', token);
-
-      if (user.role === 'admin') {
-        navigate('/admin-dashboard');
-      } else {
-        navigate('/user-dashboard');
+        if (user.role === 'admin') {
+          navigate('/admin-dashboard');
+        } else {
+          navigate('/user-dashboard');
+        }
+      } catch (err) {
+        if (err.response && err.response.data) {
+          formik.setErrors({ server: err.response.data.msg });
+        }
       }
-    } catch (err) {
-      if (err.response && err.response.data) {
-        setError(err.response.data.msg);
-      }
-    }
-  };
+    },
+  });
 
   return (
-    <form className="login-form" onSubmit={onSubmit}>
-      <h2>Login</h2>
-      <div className="input-container">
-        <i className="fas fa-envelope"></i>
-        <input
+    <Box className="login-form" sx={{ maxWidth: 400, margin: '0 auto', padding: 3, border: '1px solid #ddd', borderRadius: 2 }}>
+      <Typography variant="h4" gutterBottom align="center">Login</Typography>
+
+      <form onSubmit={formik.handleSubmit}>
+        {/* Email Field */}
+        <TextField
+          fullWidth
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
+          name="email"
+          label="Email"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.email && Boolean(formik.errors.email)}
+          helperText={formik.touched.email && formik.errors.email}
+          margin="normal"
         />
-      </div>
-      <div className="input-container">
-        <i className="fas fa-lock"></i>
-        <input
-          type={showPassword ? 'text' : 'password'} // Toggle password visibility
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          required
+
+        {/* Password Field */}
+        <TextField
+          fullWidth
+          type="password"
+          name="password"
+          label="Password"
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.password && Boolean(formik.errors.password)}
+          helperText={formik.touched.password && formik.errors.password}
+          margin="normal"
         />
-        <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} onClick={() => setShowPassword(!showPassword)}></i>
-      </div>
-      <button type="submit">Log in</button>
-      {error && <div className="error">{error}</div>}
-      <div className="remember-forgot">
-        <label>
-          <input type="checkbox" /> Remember me
-        </label>
-        <a href="/forgot-password">Forgot password?</a>
-      </div>
-      <div className="account-link">
-        <p>Don't have an account? <a href="/register">Register</a></p>
-      </div>
-    </form>
+
+        {/* Server Error Message */}
+        {formik.errors.server && <Typography color="error" variant="body2" align="center">{formik.errors.server}</Typography>}
+
+        {/* Remember Me */}
+        <FormControlLabel
+          control={<Checkbox />}
+          label="Remember me"
+          sx={{ display: 'block', marginTop: 2 }}
+        />
+
+        {/* Login Button */}
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          type="submit"
+          sx={{ marginTop: 2 }}
+        >
+          Log in
+        </Button>
+
+        {/* Forgot Password */}
+        <Box sx={{ textAlign: 'center', marginTop: 2 }}>
+          <Link href="/forgot-password" variant="body2">
+            Forgot password?
+          </Link>
+        </Box>
+
+        {/* Register Link */}
+        <Box sx={{ textAlign: 'center', marginTop: 2 }}>
+          <Typography variant="body2">
+            Don't have an account? <Link href="/register">Register</Link>
+          </Typography>
+        </Box>
+      </form>
+    </Box>
   );
 };
 

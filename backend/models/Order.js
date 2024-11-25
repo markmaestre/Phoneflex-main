@@ -10,9 +10,9 @@ const orderSchema = new mongoose.Schema({
     },
   ],
   totalPrice: { type: Number, required: true },
-  status: { type: String, enum: ['pending', 'shipped', 'delivered', 'cancelled'], default: 'pending' },
+  status: { type: String, enum: ['pending', 'shipped', 'delivered', 'cancelled', 'success'], default: 'pending' },
   orderDate: { type: Date, default: Date.now },
-  paymentMethod: { type: String, enum: ['credit_card', 'paypal', 'cash_on_delivery'], default: 'credit_card' },
+  paymentMethod: { type: String, enum: ['credit_card', 'cash_on_delivery'], default: 'cash_on_delivery' },
   shippingAddress: { type: String, required: true },
 });
 

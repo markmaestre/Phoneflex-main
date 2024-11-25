@@ -101,6 +101,8 @@ const Transactions = () => {
                       ? '#fff3cd'
                       : order.status === 'cancelled'
                       ? '#f8d7da'
+                      : order.status === 'success'
+                      ? '#c8e6c9' // Green for success
                       : 'white',
                 }}
               >
@@ -120,7 +122,7 @@ const Transactions = () => {
                 <td>
                   {updatingOrderId === order._id ? (
                     <Spinner animation="border" size="sm" />
-                  ) : order.status !== 'cancelled' && order.status !== 'delivered' ? (
+                  ) : order.status !== 'success' && order.status !== 'cancelled' && order.status !== 'delivered' ? (
                     <>
                       {order.status !== 'shipped' && (
                         <Button

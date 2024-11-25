@@ -1,10 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './css/CheckoutModal.css'; // Import CheckoutModal CSS
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 
 const CheckoutModal = ({ order, onClose, onStatusUpdated }) => {
   const [paymentMethod, setPaymentMethod] = useState('');
   const [updatedOrder, setUpdatedOrder] = useState(order); // Local state for the updated order
+
+  // State for managing the updated quantity of each product
+  const [productQuantities, setProductQuantities] = useState(
+    order.products.reduce((acc, item) => {
+      acc[item.productId._id] = item.quantity;
+      return acc;
+    }, {})
+  );
+
+  useEffect(() => {
+    // Sync updatedOrder with props change
+    setUpdatedOrder(order);
+    setProductQuantities(order.products.reduce((acc, item) => {
+      acc[item.productId._id] = item.quantity;
+      return acc;
+    }, {}));
+  }, [order]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,6 +70,46 @@ const CheckoutModal = ({ order, onClose, onStatusUpdated }) => {
     }
   };
 
+  const handleQuantityChange = (productId, newQuantity) => {
+    setProductQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: newQuantity,
+    }));
+  };
+
+  const updateProductQuantity = async (productId) => {
+    const newQuantity = productQuantities[productId];
+    if (newQuantity <= 0) return; // Skip if quantity is invalid
+
+    try {
+      const response = await fetch('http://localhost:5000/api/orders/:orderId/updateQuantity', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          orderId: order._id,
+          productId,
+          newQuantity,
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert('Quantity updated successfully');
+        setUpdatedOrder(data.order); // Update the order in the UI
+        onStatusUpdated(data.order); // Update the UI with the new data
+      } else {
+        console.error('Error from backend:', data);
+        alert(`Error: ${data.message}`);
+      }
+    } catch (error) {
+      console.error('Error updating quantity:', error);
+      alert('Failed to update quantity');
+    }
+  };
+
   // Disable checkout and delete if the order is already shipped
   const isOrderShipped = updatedOrder.status === 'shipped';
   const isCheckoutDisabled = isOrderShipped || !paymentMethod; // Disable button if order is shipped or payment method not selected
@@ -76,6 +133,24 @@ const CheckoutModal = ({ order, onClose, onStatusUpdated }) => {
               {updatedOrder.products.map((item) => (
                 <li className="list-group-item" key={item.productId._id}>
                   {item.productId.name} (x{item.quantity}) - ₱{(item.price * item.quantity).toFixed(2)}
+                  {!isOrderShipped && (
+                    <div className="mt-2">
+                      <label>Quantity:</label>
+                      <input
+                        type="number"
+                        min="1"
+                        value={productQuantities[item.productId._id]}
+                        onChange={(e) => handleQuantityChange(item.productId._id, e.target.value)}
+                        className="form-control"
+                      />
+                      <button
+                        className="btn btn-sm btn-warning mt-2"
+                        onClick={() => updateProductQuantity(item.productId._id)}
+                      >
+                        Update Quantity
+                      </button>
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>
@@ -96,8 +171,7 @@ const CheckoutModal = ({ order, onClose, onStatusUpdated }) => {
                     required
                   >
                     <option value="">Select Payment Method</option>
-                    <option value="Credit Card">Credit Card</option>
-                    <option value="PayPal">PayPal</option>
+                   
                     <option value="Cash on Delivery">Cash on Delivery</option>
                   </select>
                 </div>

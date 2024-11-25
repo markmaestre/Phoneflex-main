@@ -1,0 +1,112 @@
+/* TransactionHistory.css */
+.transaction-history {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+  }
+  
+  .transaction-history h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .transaction-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  
+  .transaction-history-table th,
+  .transaction-history-table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .transaction-history-table th {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .transaction-history-table td {
+    background-color: #fff;
+  }
+  
+  .transaction-history-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .transaction-history-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .transaction-history-table td span {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .transaction-history-table td .status {
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-transform: capitalize;
+  }
+  
+  .transaction-history-table td .status.pending {
+    background-color: #f7d07a;
+    color: #333;
+  }
+  
+  .transaction-history-table td .status.delivered {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .transaction-history-table td .status.cancelled {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .transaction-history-table td .actions button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s;
+  }
+  
+  .transaction-history-table td .actions button:hover {
+    background-color: #0056b3;
+  }
+  
+  .transaction-history-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .transaction-history-buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .transaction-history-buttons button:hover {
+    background-color: #0056b3;
+  }
+  
+  .error-message {
+    text-align: center;
+    color: red;
+    font-size: 16px;
+  }
+  

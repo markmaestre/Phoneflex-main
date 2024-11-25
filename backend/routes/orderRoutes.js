@@ -9,8 +9,9 @@ router.get('/orders/user', authMiddleware, orderController.getUserOrders); // Ge
 router.delete('/orders/:orderId', authMiddleware, orderController.deleteOrder); // Delete an order
 router.post('/orders/checkout', authMiddleware, orderController.checkoutOrder); // Checkout and process payment
 router.get('/orders', authMiddleware, orderController.getAllOrders); // Admin view all orders
-// Routes
-router.post('/orders/update-status', authMiddleware, orderController.updateOrderStatus);  // Update order status
+
+router.put('/orders/:orderId/updateQuantity', authMiddleware, orderController.updateOrderQuantity);
+router.post('/orders/update-status', authMiddleware, orderController.updateOrderStatus); 
 
 
 module.exports = router;

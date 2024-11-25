@@ -71,4 +71,76 @@
     height: 24px;
   }
   
-  
+  /* transactions.css */
+
+/* Make sure the container fills the viewport */
+.transactions-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* Improve the table's appearance */
+.scrollable-table {
+  max-height: 500px;
+  overflow-y: auto;
+  margin-bottom: 30px;
+}
+
+/* Styling for each table */
+.table th, .table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Make the buttons more uniform */
+button {
+  margin: 5px;
+}
+
+/* Styling for the Back Button */
+button[type="button"] {
+  font-weight: bold;
+  padding: 10px 20px;
+}
+
+/* Add some space and padding */
+h2, h3 {
+  text-align: center;
+  color: #333;
+}
+
+/* Make table headers more prominent */
+.table th {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Styling for order status colors */
+.status-shipped {
+  background-color: #d4edda; /* Light green */
+}
+
+.status-delivered {
+  background-color: #fff3cd; /* Light yellow */
+}
+
+.status-cancelled {
+  background-color: #f8d7da; /* Light red */
+}
+
+/* Ensure proper styling on small screens */
+@media (max-width: 768px) {
+  .scrollable-table {
+    max-height: 400px;
+  }
+
+  .table th, .table td {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  button {
+    font-size: 12px;
+  }
+}

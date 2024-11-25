@@ -156,7 +156,7 @@ router.post('/update-profile', authMiddleware, upload.single('image'), async (re
         const user = await User.findById(req.user);
         if (!user) return res.status(400).json({ msg: 'User not found' });
 
-        // Update the user's profile data
+   
         user.name = name || user.name;
         if (imgPath) user.img = imgPath;
 
